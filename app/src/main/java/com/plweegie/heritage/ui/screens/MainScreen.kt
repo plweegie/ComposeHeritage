@@ -42,7 +42,7 @@ fun MainScreen(
                 modifier = Modifier.padding(innerPadding),
                 places = placesListState.value.let {
                     if (it is PlacesListViewModel.UiState.Success) {
-                        it.places.map { place -> place.title }
+                        it.places
                     } else {
                         emptyList()
                     }

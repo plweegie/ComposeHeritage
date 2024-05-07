@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.plweegie.heritage.FeedApi
 import com.plweegie.heritage.model.HeritagePlace
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -20,10 +19,10 @@ class PlacesListViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _heritagePlacesFlow: MutableStateFlow<UiState> = MutableStateFlow(UiState.Idle)
-
     val uiState = flow<UiState> {
-        emit(UiState.Success(placesFeedApi.getPlacesFeed().placesList))
+        emit(UiState.Success(placesFeedApi.getPlacesFeed().placesList
+            .filterNot { it.isFreeEntry }
+        ))
     }.catch { e ->
         Log.e("PlaceListViewModel", "Error fetching places: $e")
         emit(UiState.Error)
