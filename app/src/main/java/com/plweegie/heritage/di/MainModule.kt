@@ -1,6 +1,8 @@
 package com.plweegie.heritage.di
 
-import com.plweegie.heritage.xmlfeedparser.FeedApi
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.plweegie.heritage.FeedApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -8,7 +10,7 @@ import dagger.hilt.android.components.ViewModelComponent
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -17,17 +19,22 @@ object MainModule {
     private const val BASE_URL = "https://www.english-heritage.org.uk/api/"
 
     @Provides
+    fun provideGson(): Gson = GsonBuilder()
+        .excludeFieldsWithoutExposeAnnotation()
+        .create()
+
+    @Provides
     fun provideOkHttpClient(cache: Cache): OkHttpClient =
         OkHttpClient.Builder()
             .cache(cache)
             .build()
 
     @Provides
-    fun provideRetrofit(client: OkHttpClient): Retrofit =
+    fun provideRetrofit(gson: Gson, client: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
-            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
     @Provides

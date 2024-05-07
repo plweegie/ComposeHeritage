@@ -73,8 +73,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.gson)
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.scalars)
+    implementation(libs.retrofit.converter.gson)
     implementation(libs.coil)
     implementation(libs.coil.compose)
 
