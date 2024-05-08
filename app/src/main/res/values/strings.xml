@@ -3,4 +3,6 @@
     <string name="main_title">English Heritage</string>
     <string name="category">Category</string>
     <string name="region">Region</string>
+    <string name="list_label">List view</string>
+    <string name="map_label">Map view</string>
 </resources>

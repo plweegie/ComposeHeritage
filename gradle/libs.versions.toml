@@ -1,14 +1,14 @@
 [versions]
 agp = "8.4.0"
 kotlin = "1.9.0"
-coreKtx = "1.13.0"
+coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.7.0"
 lifecycleRuntimeCompose = "2.7.0"
 activityCompose = "1.9.0"
-composeBom = "2024.04.01"
+composeBom = "2024.05.00"
 retrofit = "2.11.0"
 coil = "2.6.0"
 hilt = "2.49"
@@ -20,6 +20,7 @@ androidx-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.7
 androidx-hilt = "com.google.dagger:hilt-android:2.49"
 dagger-hilt-compiler = "com.google.dagger:hilt-compiler:2.49"
 androidx-hilt-navigation-compose = "androidx.hilt:hilt-navigation-compose:1.2.0"
+androidx-navigation-compose = "androidx.navigation:navigation-compose:2.7.7"
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -34,6 +35,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-fonts-compose = "androidx.compose.ui:ui-text-google-fonts:1.6.7"
+androidx-compose-icons = "androidx.compose.material:material-icons-extended:1.6.7"
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
