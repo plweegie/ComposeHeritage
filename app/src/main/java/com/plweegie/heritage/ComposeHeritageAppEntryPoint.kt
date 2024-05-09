@@ -78,7 +78,7 @@ fun ComposeHeritageAppEntryPoint() {
                     start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
                     top = 0.dp,
                     end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
-                    bottom = innerPadding.calculateBottomPadding()
+                    bottom = innerPadding.calculateBottomPadding() - 48.dp
                 ),
                 navController = navController,
                 startDestination = AppScreen.Main.route
