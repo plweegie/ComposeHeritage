@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.plweegie.heritage.ui.theme.HeritageRed
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +32,7 @@ fun HeritageDropdownMenu(
         TextField(
             label = { Text(
                 text = label,
-                color = HeritageRed
+                color = MaterialTheme.colorScheme.tertiary
             )
             },
             modifier = Modifier.menuAnchor().fillMaxWidth(),

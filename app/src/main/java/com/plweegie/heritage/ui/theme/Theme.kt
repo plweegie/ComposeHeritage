@@ -1,6 +1,5 @@
 package com.plweegie.heritage.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -13,17 +12,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color.DarkGray,
+    primary = Color.White,
     secondary = Color.LightGray,
-    tertiary = Color.Red,
+    tertiary = PaleHeritageRed,
     surface = Color.DarkGray,
-    onSurface = Color.White,
+    onSurface = Color.White
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Color.DarkGray,
     secondary = Color.LightGray,
-    tertiary = Color.Red,
+    tertiary = HeritageRed,
     surface = Color.DarkGray,
     onSurface = Color.White
 

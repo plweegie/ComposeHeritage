@@ -1,8 +1,6 @@
 package com.plweegie.heritage.ui.screens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,14 +14,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.plweegie.heritage.R
 import com.plweegie.heritage.ui.components.HeritageDropdownMenu
 import com.plweegie.heritage.ui.components.LoadingIndicator
 import com.plweegie.heritage.ui.components.PlacesList
-import com.plweegie.heritage.ui.theme.ComposeHeritageTheme
 import com.plweegie.heritage.viewmodel.PlacesListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,55 +51,47 @@ fun MainScreen(
         "Roman"
     )
 
-    ComposeHeritageTheme {
+    val placesListState = viewModel.uiState.collectAsState()
 
-        val placesListState = viewModel.uiState.collectAsState()
-
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    ),
-                    title = { Text(text = stringResource(id = R.string.main_title).uppercase()) },
-                )
-            }) { innerPadding ->
-
-            Column(
-                modifier = Modifier.padding(
-                    start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
-                    top = 0.dp,
-                    end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
-                    bottom = innerPadding.calculateBottomPadding()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
                 ),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                HeritageDropdownMenu(
-                    label = stringResource(id = R.string.category),
-                    options = placeCategories,
-                    onSelected = { viewModel.categoryFilter = it }
-                )
+                title = { Text(text = stringResource(id = R.string.main_title).uppercase()) },
+            )
+        }) { innerPadding ->
 
-                HeritageDropdownMenu(
-                    label = stringResource(id = R.string.region),
-                    options = regions,
-                    onSelected = { viewModel.regionFilter = it }
-                )
+        Column(
+            modifier = Modifier.padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            HeritageDropdownMenu(
+                label = stringResource(id = R.string.category),
+                options = placeCategories,
+                onSelected = { viewModel.categoryFilter = it }
+            )
 
-                LoadingIndicator(placesListState.value is PlacesListViewModel.UiState.Loading)
+            HeritageDropdownMenu(
+                label = stringResource(id = R.string.region),
+                options = regions,
+                onSelected = { viewModel.regionFilter = it }
+            )
 
-                PlacesList(
-                    places = placesListState.value.let {
-                        if (it is PlacesListViewModel.UiState.Success) {
-                            it.places
-                        } else {
-                            emptyList()
-                        }
+            LoadingIndicator(placesListState.value is PlacesListViewModel.UiState.Loading)
+
+            PlacesList(
+                places = placesListState.value.let {
+                    if (it is PlacesListViewModel.UiState.Success) {
+                        it.places
+                    } else {
+                        emptyList()
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

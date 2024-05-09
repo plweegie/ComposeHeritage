@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.plweegie.heritage.ui.screens.AppScreen
 import com.plweegie.heritage.ui.screens.MainScreen
 import com.plweegie.heritage.ui.screens.MapScreen
+import com.plweegie.heritage.ui.theme.ComposeHeritageTheme
 import com.plweegie.heritage.viewmodel.PlacesListViewModel
 
 @Composable
@@ -36,48 +39,57 @@ fun ComposeHeritageAppEntryPoint() {
         AppScreen.Map
     )
 
-    Scaffold(
-        bottomBar = {
-            NavigationBar {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
+    ComposeHeritageTheme {
 
-                navigationItems.forEach { screen ->
-                    NavigationBarItem(
-                        icon = { Icon(screen.icon, contentDescription = screen.route) },
-                        label = { Text(stringResource(id = screen.resourceId)) },
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                        onClick = {
-                            navController.navigate(screen.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+        Scaffold(
+            bottomBar = {
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ) {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+
+                    navigationItems.forEach { screen ->
+                        NavigationBarItem(
+                            colors = NavigationBarItemDefaults.colors().copy(
+                                selectedIconColor = MaterialTheme.colorScheme.tertiary,
+                                selectedTextColor = MaterialTheme.colorScheme.tertiary,
+                                selectedIndicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.05f)
+                            ),
+                            icon = { Icon(screen.icon, contentDescription = screen.route) },
+                            label = { Text(stringResource(id = screen.resourceId)) },
+                            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                            onClick = {
+                                navController.navigate(screen.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
                             }
-                        }
-                    )
+                        )
+                    }
+                }
+            }
+        ) { innerPadding ->
+            NavHost(
+                modifier = Modifier.padding(
+                    start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+                    top = 0.dp,
+                    end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
+                    bottom = innerPadding.calculateBottomPadding()
+                ),
+                navController = navController,
+                startDestination = AppScreen.Main.route
+            ) {
+                composable(AppScreen.Main.route) {
+                    MainScreen(viewModel = viewModel)
+                }
+                composable(AppScreen.Map.route) {
+                    MapScreen(viewModel = viewModel)
                 }
             }
         }
-    ) { innerPadding ->
-        NavHost(
-            modifier = Modifier.padding(
-                start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
-                top = 0.dp,
-                end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
-                bottom = innerPadding.calculateBottomPadding()
-            ),
-            navController = navController,
-            startDestination = AppScreen.Main.route
-        ) {
-            composable(AppScreen.Main.route) {
-                MainScreen(viewModel = viewModel)
-            }
-            composable(AppScreen.Map.route) {
-                MapScreen(viewModel = viewModel)
-            }
-        }
     }
-
 }
