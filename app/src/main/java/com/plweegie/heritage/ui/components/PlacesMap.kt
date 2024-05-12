@@ -1,10 +1,12 @@
 package com.plweegie.heritage.ui.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -12,17 +14,20 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.plweegie.heritage.LocationTracker
 import com.plweegie.heritage.R
 import com.plweegie.heritage.model.HeritagePlace
+import kotlinx.coroutines.delay
 
 @Composable
 fun PlacesMap(
     modifier: Modifier = Modifier,
-    places: List<HeritagePlace>
+    places: List<HeritagePlace>,
+    currentLocation: LatLng
 ) {
-    val center = LatLng(52.56, -1.47)
+
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(center, 7f)
+        position = CameraPosition.fromLatLngZoom(currentLocation, 7f)
     }
 
     val vectorMarker = ContextCompat.getDrawable(
@@ -33,6 +38,20 @@ fun PlacesMap(
     }
 
     val vectorBitmap = vectorMarker?.toBitmap()
+
+    LaunchedEffect(currentLocation) {
+        delay(timeMillis = 500)
+
+        if (currentLocation.latitude != LocationTracker.DEFAULT_LOCATION.latitude &&
+            currentLocation.longitude != LocationTracker.DEFAULT_LOCATION.longitude) {
+            cameraPositionState.animate(
+                update = CameraUpdateFactory.newCameraPosition(
+                    CameraPosition.Builder().target(currentLocation).zoom(9f).build()
+                ),
+                durationMs = 500
+            )
+        }
+    }
 
     GoogleMap(
         modifier = modifier,

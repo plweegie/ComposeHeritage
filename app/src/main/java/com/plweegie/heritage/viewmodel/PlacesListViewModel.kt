@@ -1,10 +1,12 @@
 package com.plweegie.heritage.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plweegie.heritage.FeedApi
+import com.plweegie.heritage.LocationTracker
 import com.plweegie.heritage.model.HeritagePlace
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,8 +23,11 @@ import javax.inject.Inject
 @HiltViewModel
 class PlacesListViewModel @Inject constructor(
     private val placesFeedApi: FeedApi,
+    private val locationTracker: LocationTracker,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    val currentLocation = mutableStateOf(LocationTracker.DEFAULT_LOCATION)
 
     var regionFilter: String
         get() = _regionFilterFlow.value
@@ -60,6 +65,10 @@ class PlacesListViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(),
         initialValue = UiState.Loading
     )
+
+    suspend fun getCurrentLocation() {
+        currentLocation.value = locationTracker.getCurrentLocation()
+    }
 
     sealed class UiState {
         data object Loading : UiState()

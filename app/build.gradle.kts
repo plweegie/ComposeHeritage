@@ -70,7 +70,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.fonts.compose)
     implementation(libs.androidx.compose.icons)
-    implementation(libs.google.maps)
+    implementation(libs.kotlinx.coroutines.play.services)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,6 +79,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.accompanist.permissions)
+    implementation(libs.google.maps)
+    implementation(libs.google.play.services.location)
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
