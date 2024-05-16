@@ -1,5 +1,6 @@
 package com.plweegie.heritage.ui.components
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -54,7 +55,7 @@ fun PlacesMap(
     }
 
     GoogleMap(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
         val bitmapDescriptor = vectorBitmap?.let {

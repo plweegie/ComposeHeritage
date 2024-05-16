@@ -1,5 +1,7 @@
 package com.plweegie.heritage.model
 
+import android.location.Location
+import android.location.LocationManager.NETWORK_PROVIDER
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -48,4 +50,14 @@ data class HeritagePlace(
     @Expose
     @SerializedName("Region")
     val region: String
-)
+) {
+    val location: Location
+        get() {
+            val loc = Location(NETWORK_PROVIDER).also {
+                it.latitude = latitude
+                it.longitude = longitude
+            }
+
+            return loc
+        }
+}

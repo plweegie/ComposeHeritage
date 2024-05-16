@@ -1,7 +1,7 @@
 package com.plweegie.heritage
 
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -28,11 +27,13 @@ import com.plweegie.heritage.ui.screens.MainScreen
 import com.plweegie.heritage.ui.screens.MapScreen
 import com.plweegie.heritage.ui.theme.ComposeHeritageTheme
 import com.plweegie.heritage.viewmodel.PlacesListViewModel
+import com.plweegie.heritage.viewmodel.PlacesMapViewModel
 
 @Composable
 fun ComposeHeritageAppEntryPoint() {
     val navController = rememberNavController()
     val viewModel = hiltViewModel<PlacesListViewModel>()
+    val mapViewModel = hiltViewModel<PlacesMapViewModel>()
 
     val navigationItems = listOf(
         AppScreen.Main,
@@ -42,6 +43,7 @@ fun ComposeHeritageAppEntryPoint() {
     ComposeHeritageTheme {
 
         Scaffold(
+            contentWindowInsets = WindowInsets(0.dp),
             bottomBar = {
                 NavigationBar(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -74,12 +76,7 @@ fun ComposeHeritageAppEntryPoint() {
             }
         ) { innerPadding ->
             NavHost(
-                modifier = Modifier.padding(
-                    start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
-                    top = 0.dp,
-                    end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
-                    bottom = innerPadding.calculateBottomPadding() - 24.dp
-                ),
+                modifier = Modifier.padding(innerPadding).fillMaxSize(),
                 navController = navController,
                 startDestination = AppScreen.Main.route
             ) {
@@ -87,7 +84,7 @@ fun ComposeHeritageAppEntryPoint() {
                     MainScreen(viewModel = viewModel)
                 }
                 composable(AppScreen.Map.route) {
-                    MapScreen(viewModel = viewModel)
+                    MapScreen(viewModel = mapViewModel)
                 }
             }
         }

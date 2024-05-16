@@ -1,5 +1,7 @@
 package com.plweegie.heritage.ui.screens
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -15,23 +17,27 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.maps.model.LatLng
 import com.plweegie.heritage.R
+import com.plweegie.heritage.ui.components.LoadingIndicator
 import com.plweegie.heritage.ui.components.PlacesMap
 import com.plweegie.heritage.viewmodel.PlacesListViewModel
+import com.plweegie.heritage.viewmodel.PlacesMapViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun MapScreen(
-    viewModel: PlacesListViewModel = viewModel()
+    viewModel: PlacesMapViewModel = viewModel()
 ) {
 
     val scope = rememberCoroutineScope()
@@ -50,6 +56,7 @@ fun MapScreen(
     val placesListState = viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0.dp),
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
@@ -62,7 +69,7 @@ fun MapScreen(
                 actions = {
                     IconButton(onClick = {
                         scope.launch(Dispatchers.IO) {
-                            viewModel.getCurrentLocation()
+                            viewModel.findCurrentLocation()
                         }
                     }) {
                         Icon(
@@ -74,18 +81,24 @@ fun MapScreen(
             )
         }) { innerPadding ->
 
-        PlacesMap(
+        Column(
             modifier = Modifier.padding(innerPadding),
-            places = placesListState.value.let {
-                if (it is PlacesListViewModel.UiState.Success) {
-                    it.places
-                } else {
-                    emptyList()
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LoadingIndicator(placesListState.value is PlacesMapViewModel.UiState.Loading)
+
+            PlacesMap(
+                places = placesListState.value.let {
+                    if (it is PlacesMapViewModel.UiState.Success) {
+                        it.places
+                    } else {
+                        emptyList()
+                    }
+                },
+                currentLocation = with(viewModel.currentLocation.value) {
+                    LatLng(latitude, longitude)
                 }
-            },
-            currentLocation = with(viewModel.currentLocation.value) {
-                LatLng(latitude, longitude)
-            }
-        )
+            )
+        }
     }
 }

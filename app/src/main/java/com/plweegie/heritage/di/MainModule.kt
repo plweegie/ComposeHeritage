@@ -3,6 +3,8 @@ package com.plweegie.heritage.di
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.plweegie.heritage.FeedApi
+import com.plweegie.heritage.LocationTracker
+import com.plweegie.heritage.model.PlacesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,4 +42,10 @@ object MainModule {
     @Provides
     fun provideAPI(retrofit: Retrofit): FeedApi =
         retrofit.create(FeedApi::class.java)
+
+    @Provides
+    fun provideRepository(
+        api: FeedApi,
+        locationTracker: LocationTracker
+    ): PlacesRepository = PlacesRepository(api, locationTracker)
 }
