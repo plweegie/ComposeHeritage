@@ -93,6 +93,7 @@ fun MainScreen(
                     IconButton(onClick = {
                         scope.launch(Dispatchers.IO) {
                             viewModel.findCurrentLocation()
+                            viewModel.sortedByDistance = true
                         }
                     }) {
                         Icon(

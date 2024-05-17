@@ -1,12 +1,9 @@
 package com.plweegie.heritage.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.plweegie.heritage.LocationTracker
 import com.plweegie.heritage.model.HeritagePlace
 import com.plweegie.heritage.model.PlacesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,12 +27,13 @@ class PlacesListViewModel @Inject constructor(
     private val currentLocation
         get() = repository.currentLocation
 
-    private val sortingComparatorState: MutableState<Comparator<HeritagePlace>> =
-         if (currentLocation.value == LocationTracker.DEFAULT_LOCATION) {
-                mutableStateOf(compareBy { it.title })
-            } else {
-                mutableStateOf(compareBy { currentLocation.value.distanceTo(it.location) })
-         }
+    var sortedByDistance: Boolean
+        get() = _comparatorFlow.value == compareBy<HeritagePlace> { currentLocation.value.distanceTo(it.location) }
+        set(value) = if (value) {
+            _comparatorFlow.value = compareBy { currentLocation.value.distanceTo(it.location) }
+        } else {
+            _comparatorFlow.value = compareBy { it.title }
+        }
 
     var regionFilter: String
         get() = _regionFilterFlow.value
@@ -56,11 +54,11 @@ class PlacesListViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState = combine(_regionFilterFlow, _categoryFilterFlow, _comparatorFlow) { region, category, comp ->
-        region to category
-    }.flatMapLatest { (region, category) ->
+        Triple(region, category, comp)
+    }.flatMapLatest { (region, category, comp) ->
         flow<UiState> {
             emit(UiState.Success(repository.getPlacesFeed().placesList
-                .sortedWith(sortingComparatorState.value)
+                .sortedWith(comp)
                 .filterNot { it.isFreeEntry }
                 .filter { it.region == region || region.isEmpty() }
                 .filter { it.category == category || category.isEmpty() }
