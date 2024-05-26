@@ -71,6 +71,10 @@ dependencies {
     implementation(libs.androidx.fonts.compose)
     implementation(libs.androidx.compose.icons)
     implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.androidx.work)
+    implementation(libs.androidx.work.ktx)
+    implementation(libs.androidx.hilt.work)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -89,6 +93,7 @@ dependencies {
     implementation(libs.coil.compose)
 
     kapt(libs.dagger.hilt.compiler)
+    kapt(libs.androidx.hilt.compiler)
 }
 
 secrets {

@@ -1,4 +1,4 @@
-package com.plweegie.heritage
+package com.plweegie.heritage.location
 
 import android.content.Context
 import android.content.pm.PackageManager

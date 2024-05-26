@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -23,6 +24,11 @@ class PlacesListViewModel @Inject constructor(
     private val repository: PlacesRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private companion object {
+        const val CATEGORY_SAVED_STATE_KEY = "category_key"
+        const val REGION_SAVED_STATE_KEY = "region_key"
+    }
 
     private val currentLocation
         get() = repository.currentLocation
@@ -38,17 +44,21 @@ class PlacesListViewModel @Inject constructor(
     var regionFilter: String
         get() = _regionFilterFlow.value
         set(value) {
+            savedStateHandle[REGION_SAVED_STATE_KEY] = value
             _regionFilterFlow.value = value
         }
 
     var categoryFilter: String
         get() = _categoryFilterFlow.value
         set(value) {
+            savedStateHandle[CATEGORY_SAVED_STATE_KEY] = value
             _categoryFilterFlow.value = value
         }
 
-    private val _regionFilterFlow: MutableStateFlow<String> = MutableStateFlow("")
-    private val _categoryFilterFlow: MutableStateFlow<String> = MutableStateFlow("")
+    private val _regionFilterFlow: MutableStateFlow<String> =
+        MutableStateFlow(savedStateHandle[REGION_SAVED_STATE_KEY] ?: "")
+    private val _categoryFilterFlow: MutableStateFlow<String> =
+        MutableStateFlow(savedStateHandle[CATEGORY_SAVED_STATE_KEY] ?: "")
     private val _comparatorFlow: MutableStateFlow<Comparator<HeritagePlace>> =
         MutableStateFlow(compareBy { it.title })
 
@@ -65,6 +75,8 @@ class PlacesListViewModel @Inject constructor(
             ))
         }.onStart {
             emit(UiState.Loading)
+        }.onEach {
+
         }.catch { e ->
             Log.e("PlaceListViewModel", "Error fetching places: $e")
             emit(UiState.Error)

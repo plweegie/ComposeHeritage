@@ -12,10 +12,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.plweegie.heritage.LocationTracker
+import com.plweegie.heritage.location.LocationTracker
 import com.plweegie.heritage.R
 import com.plweegie.heritage.model.HeritagePlace
 import kotlinx.coroutines.delay
@@ -56,7 +57,8 @@ fun PlacesMap(
 
     GoogleMap(
         modifier = modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
+        cameraPositionState = cameraPositionState,
+        uiSettings = MapUiSettings(zoomControlsEnabled = false)
     ) {
         val bitmapDescriptor = vectorBitmap?.let {
             BitmapDescriptorFactory.fromBitmap(it)
@@ -68,10 +70,7 @@ fun PlacesMap(
                 icon = bitmapDescriptor,
                 state = MarkerState(position = position),
                 title = it.title,
-                onClick = {
-                    it.showInfoWindow()
-                    true
-                }
+                onClick = { false }
             )
         }
     }

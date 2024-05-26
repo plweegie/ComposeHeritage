@@ -5,4 +5,6 @@
     <string name="region">Region</string>
     <string name="list_label">List view</string>
     <string name="map_label">Map view</string>
+    <string name="geofence_title">English Heritage nearby</string>
+    <string name="geofence_text">You\'re near %1$s.</string>
 </resources>

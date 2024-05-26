@@ -2,7 +2,7 @@ package com.plweegie.heritage.model
 
 import androidx.compose.runtime.mutableStateOf
 import com.plweegie.heritage.FeedApi
-import com.plweegie.heritage.LocationTracker
+import com.plweegie.heritage.location.LocationTracker
 
 class PlacesRepository(
     private val placesFeedApi: FeedApi,

@@ -3,8 +3,10 @@ package com.plweegie.heritage.di
 import android.app.Application
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
-import com.plweegie.heritage.LocationTracker
+import com.plweegie.heritage.location.GeofenceManager
+import com.plweegie.heritage.location.LocationTracker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,4 +33,14 @@ class ApplicationModule {
         fusedLocationProviderClient: FusedLocationProviderClient,
         @ApplicationContext context: Context
     ) = LocationTracker(fusedLocationProviderClient, context)
+
+    @Provides
+    fun provideGeofencingClient(@ApplicationContext context: Context): GeofencingClient =
+        LocationServices.getGeofencingClient(context)
+
+    @Provides
+    fun provideGeofenceManager(
+        geofencingClient: GeofencingClient,
+        @ApplicationContext context: Context
+    ): GeofenceManager = GeofenceManager(geofencingClient, context)
 }
