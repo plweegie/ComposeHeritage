@@ -43,6 +43,7 @@ class GeofenceManager(
                 .setExpirationDuration(GEOFENCE_DURATION_MILLIS)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build()
+        )
     }
 
     @SuppressLint("MissingPermission")

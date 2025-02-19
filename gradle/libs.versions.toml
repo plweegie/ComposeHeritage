@@ -1,37 +1,38 @@
 [versions]
-agp = "8.4.0"
-kotlin = "1.9.0"
-coreKtx = "1.13.1"
+agp = "8.8.1"
+kotlin = "2.0.21"
+kotlin-ksp = "2.0.21-1.0.27"
+coreKtx = "1.15.0"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.7.0"
-lifecycleRuntimeCompose = "2.7.0"
-activityCompose = "1.9.0"
-composeBom = "2024.05.00"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.8.7"
+lifecycleRuntimeCompose = "2.8.7"
+activityCompose = "1.10.0"
+composeBom = "2025.02.00"
 retrofit = "2.11.0"
-coil = "2.6.0"
-hilt = "2.49"
+coil = "2.7.0"
+hilt = "2.55"
 secrets = "2.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
-androidx-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0"
-androidx-hilt = "com.google.dagger:hilt-android:2.49"
-dagger-hilt-compiler = "com.google.dagger:hilt-compiler:2.49"
+androidx-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7"
+androidx-hilt = "com.google.dagger:hilt-android:2.55"
+dagger-hilt-compiler = "com.google.dagger:hilt-compiler:2.55"
 androidx-hilt-compiler = "androidx.hilt:hilt-compiler:1.2.0"
 androidx-hilt-work = "androidx.hilt:hilt-work:1.2.0"
 androidx-hilt-navigation-compose = "androidx.hilt:hilt-navigation-compose:1.2.0"
-androidx-navigation-compose = "androidx.navigation:navigation-compose:2.7.7"
+androidx-navigation-compose = "androidx.navigation:navigation-compose:2.8.7"
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-work = "androidx.work:work-runtime:2.9.0"
-androidx-work-ktx = "androidx.work:work-runtime-ktx:2.9.0"
+androidx-work = "androidx.work:work-runtime:2.10.0"
+androidx-work-ktx = "androidx.work:work-runtime-ktx:2.10.0"
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -39,17 +40,17 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-fonts-compose = "androidx.compose.ui:ui-text-google-fonts:1.6.7"
-androidx-compose-icons = "androidx.compose.material:material-icons-extended:1.6.7"
+androidx-fonts-compose = "androidx.compose.ui:ui-text-google-fonts:1.7.8"
+androidx-compose-icons = "androidx.compose.material:material-icons-extended:1.7.8"
 accompanist-permissions = "com.google.accompanist:accompanist-permissions:0.34.0"
-kotlinx-coroutines-play-services = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0"
+kotlinx-coroutines-play-services = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0"
 
-google-maps = "com.google.maps.android:maps-compose:4.4.1"
-google-play-services-location = "com.google.android.gms:play-services-location:21.2.0"
+google-maps = "com.google.maps.android:maps-compose:6.4.4"
+google-play-services-location = "com.google.android.gms:play-services-location:21.3.0"
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-gson = "com.google.code.gson:gson:2.10.1"
+gson = "com.google.code.gson:gson:2.11.0"
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
@@ -57,7 +58,8 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 

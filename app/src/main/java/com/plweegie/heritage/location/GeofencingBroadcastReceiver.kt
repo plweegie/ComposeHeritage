@@ -35,8 +35,6 @@ class GeofencingBroadcastReceiver : BroadcastReceiver() {
         val geofenceTransition = geofencingEvent.geofenceTransition
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             val triggeringGeofences = geofencingEvent.triggeringGeofences
-
-            createNotification()
         }
 
 
@@ -47,8 +45,8 @@ class GeofencingBroadcastReceiver : BroadcastReceiver() {
             createNotificationChannel()
         )
 
-        val notification = createNotification(context, )
-        notificationManager.notify(Random.nextInt(), notification)
+        //val notification = createNotification(context, )
+        //notificationManager.notify(Random.nextInt(), notification)
     }
 
     private fun createNotification(context: Context, placeName: String): Notification {
