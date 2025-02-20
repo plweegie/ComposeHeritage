@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.plweegie.heritage.location.GeofenceManager
 import com.plweegie.heritage.model.HeritagePlace
 import com.plweegie.heritage.model.PlacesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlacesListViewModel @Inject constructor(
     private val repository: PlacesRepository,
+    private val geofenceManager: GeofenceManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -33,10 +35,12 @@ class PlacesListViewModel @Inject constructor(
     private val currentLocation
         get() = repository.currentLocation
 
+    private val distanceComparator: Comparator<HeritagePlace> = compareBy { currentLocation.value.distanceTo(it.location) }
+
     var sortedByDistance: Boolean
         get() = _comparatorFlow.value == compareBy<HeritagePlace> { currentLocation.value.distanceTo(it.location) }
         set(value) = if (value) {
-            _comparatorFlow.value = compareBy { currentLocation.value.distanceTo(it.location) }
+            _comparatorFlow.value = distanceComparator
         } else {
             _comparatorFlow.value = compareBy { it.title }
         }
@@ -89,6 +93,17 @@ class PlacesListViewModel @Inject constructor(
 
     suspend fun findCurrentLocation() {
         repository.findCurrentLocation()
+    }
+
+    suspend fun startGeofenceMonitoring() {
+        val places = repository.getPlacesFeed().placesList
+            .sortedWith(distanceComparator)
+            .take(5)
+
+        geofenceManager.apply {
+            addGeofences(places)
+            startMonitoringGeofences()
+        }
     }
 
     sealed class UiState {

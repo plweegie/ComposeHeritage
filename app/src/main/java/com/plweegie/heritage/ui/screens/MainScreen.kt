@@ -1,5 +1,6 @@
 package com.plweegie.heritage.ui.screens
 
+import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.permissions.rememberPermissionState
 import com.plweegie.heritage.R
 import com.plweegie.heritage.ui.components.HeritageDropdownMenu
 import com.plweegie.heritage.ui.components.LoadingIndicator
@@ -76,6 +78,16 @@ fun MainScreen(
         locationPermissions.launchMultiplePermissionRequest()
     }
 
+    if (locationPermissions.allPermissionsGranted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val backgroundLocationPermission = rememberPermissionState(
+            android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+        )
+
+        LaunchedEffect("key2") {
+            backgroundLocationPermission.launchPermissionRequest()
+        }
+    }
+
     val placesListState = viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -94,6 +106,7 @@ fun MainScreen(
                         scope.launch(Dispatchers.IO) {
                             viewModel.findCurrentLocation()
                             viewModel.sortedByDistance = true
+                            viewModel.startGeofenceMonitoring()
                         }
                     }) {
                         Icon(

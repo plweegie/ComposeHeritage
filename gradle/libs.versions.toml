@@ -42,7 +42,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-fonts-compose = "androidx.compose.ui:ui-text-google-fonts:1.7.8"
 androidx-compose-icons = "androidx.compose.material:material-icons-extended:1.7.8"
-accompanist-permissions = "com.google.accompanist:accompanist-permissions:0.34.0"
+accompanist-permissions = "com.google.accompanist:accompanist-permissions:0.37.1"
 kotlinx-coroutines-play-services = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0"
 
 google-maps = "com.google.maps.android:maps-compose:6.4.4"

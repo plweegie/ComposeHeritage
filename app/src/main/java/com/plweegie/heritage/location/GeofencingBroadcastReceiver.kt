@@ -33,20 +33,24 @@ class GeofencingBroadcastReceiver : BroadcastReceiver() {
         }
 
         val geofenceTransition = geofencingEvent.geofenceTransition
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             val triggeringGeofences = geofencingEvent.triggeringGeofences
+
+            triggeringGeofences?.first()?.let {
+                sendNotification(context, it)
+            }
         }
+    }
 
-
+    private fun sendNotification(context: Context, geofence: Geofence) {
         val notificationManager =
             context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val notificationChannel = createNotificationChannel()
 
-        notificationManager.createNotificationChannel(
-            createNotificationChannel()
-        )
+        notificationManager.createNotificationChannel(notificationChannel)
 
-        //val notification = createNotification(context, )
-        //notificationManager.notify(Random.nextInt(), notification)
+        val notification = createNotification(context, geofence.requestId)
+        notificationManager.notify(Random.nextInt(), notification)
     }
 
     private fun createNotification(context: Context, placeName: String): Notification {

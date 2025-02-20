@@ -29,7 +29,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.plweegie.heritage.R
 import com.plweegie.heritage.ui.components.LoadingIndicator
 import com.plweegie.heritage.ui.components.PlacesMap
-import com.plweegie.heritage.viewmodel.PlacesListViewModel
 import com.plweegie.heritage.viewmodel.PlacesMapViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
