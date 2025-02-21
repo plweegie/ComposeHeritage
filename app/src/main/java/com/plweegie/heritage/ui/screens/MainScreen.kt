@@ -9,11 +9,7 @@ import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -24,6 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.plweegie.heritage.R
 import com.plweegie.heritage.ui.components.HeritageDropdownMenu
+import com.plweegie.heritage.ui.components.HeritageTopAppBar
 import com.plweegie.heritage.ui.components.LoadingIndicator
 import com.plweegie.heritage.ui.components.PlacesList
 import com.plweegie.heritage.viewmodel.PlacesListViewModel
@@ -33,7 +30,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: PlacesListViewModel = viewModel()
+    viewModel: PlacesListViewModel = viewModel(),
+    onNavigateToDetails: (placeName: String) -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
@@ -68,13 +66,7 @@ fun MainScreen(
         contentWindowInsets = WindowInsets(0.dp),
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    actionIconContentColor = MaterialTheme.colorScheme.onSurface,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                ),
-                title = { Text(text = stringResource(id = R.string.main_title).uppercase()) },
+            HeritageTopAppBar(
                 actions = {
                     IconButton(onClick = {
                         scope.launch(Dispatchers.IO) {
@@ -110,6 +102,7 @@ fun MainScreen(
             LoadingIndicator(placesListState.value is PlacesListViewModel.UiState.Loading)
 
             PlacesList(
+                onItemClicked = onNavigateToDetails,
                 places = placesListState.value.let {
                     if (it is PlacesListViewModel.UiState.Success) {
                         it.places

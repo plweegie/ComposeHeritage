@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.secrets)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -42,6 +43,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -75,6 +77,8 @@ dependencies {
     implementation(libs.androidx.work)
     implementation(libs.androidx.work.ktx)
     implementation(libs.androidx.hilt.work)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.google.gemini.client)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

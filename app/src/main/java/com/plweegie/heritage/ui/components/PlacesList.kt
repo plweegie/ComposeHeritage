@@ -1,5 +1,6 @@
 package com.plweegie.heritage.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +16,8 @@ import com.plweegie.heritage.model.HeritagePlace
 fun PlacesList(
     modifier: Modifier = Modifier,
     places: List<HeritagePlace>,
-    lazyListState: LazyListState = rememberLazyListState()
+    lazyListState: LazyListState = rememberLazyListState(),
+    onItemClicked: (placeName: String) -> Unit
 ) {
 
     LazyColumn(
@@ -25,7 +27,10 @@ fun PlacesList(
     ) {
         items(places.size) { index ->
             PlaceItem(
-                modifier = Modifier.padding(vertical = 32.dp),
+                modifier = Modifier.padding(vertical = 32.dp)
+                    .clickable {
+                        onItemClicked(places[index].title)
+                    },
                 place = places[index]
             )
             HorizontalDivider()

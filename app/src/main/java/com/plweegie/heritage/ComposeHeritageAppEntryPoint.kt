@@ -22,10 +22,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.plweegie.heritage.ui.screens.AppScreen
-import com.plweegie.heritage.ui.screens.MainScreen
+import com.plweegie.heritage.ui.navigation.AppScreen
+import com.plweegie.heritage.ui.navigation.MainScreenNavHost
 import com.plweegie.heritage.ui.screens.MapScreen
 import com.plweegie.heritage.ui.theme.ComposeHeritageTheme
+import com.plweegie.heritage.viewmodel.PlaceDetailViewModel
 import com.plweegie.heritage.viewmodel.PlacesListViewModel
 import com.plweegie.heritage.viewmodel.PlacesMapViewModel
 
@@ -34,6 +35,7 @@ fun ComposeHeritageAppEntryPoint() {
     val navController = rememberNavController()
     val viewModel = hiltViewModel<PlacesListViewModel>()
     val mapViewModel = hiltViewModel<PlacesMapViewModel>()
+    val detailsViewModel = hiltViewModel<PlaceDetailViewModel>()
 
     val navigationItems = listOf(
         AppScreen.Main,
@@ -81,7 +83,10 @@ fun ComposeHeritageAppEntryPoint() {
                 startDestination = AppScreen.Main.route
             ) {
                 composable(AppScreen.Main.route) {
-                    MainScreen(viewModel = viewModel)
+                    MainScreenNavHost(
+                        listViewModel = viewModel,
+                        detailViewModel = detailsViewModel
+                    )
                 }
                 composable(AppScreen.Map.route) {
                     MapScreen(viewModel = mapViewModel)

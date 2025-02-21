@@ -1,4 +1,4 @@
-package com.plweegie.heritage.ui.screens
+package com.plweegie.heritage.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
