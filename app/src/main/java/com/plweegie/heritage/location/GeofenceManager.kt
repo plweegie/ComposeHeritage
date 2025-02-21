@@ -17,9 +17,7 @@ class GeofenceManager(
 
     private companion object {
         const val GEOFENCE_RADIUS_METERS = 2000f
-        const val GEOFENCE_TEST_RADIUS_METERS = 200f
         const val GEOFENCE_DURATION_MILLIS = 3600 * 1000L // 1 hour
-        const val GEOFENCE_TEST_DURATION_MILLIS = 6 * 3600 * 1000L // 6 hours
     }
 
     private val geofencePendingIntent by lazy {
@@ -28,25 +26,14 @@ class GeofenceManager(
             applicationContext,
             0,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
     }
 
     private val geofences = mutableListOf<Geofence>()
 
     private val geofencingRequestBuilder = GeofencingRequest.Builder()
-        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
-
-    fun addTestGeofence() {
-        geofences.clear()
-
-        geofences.add(
-            Geofence.Builder()
-                .setExpirationDuration(GEOFENCE_TEST_DURATION_MILLIS)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build()
-        )
-    }
+        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
 
     fun addGeofences(places: List<HeritagePlace>) {
         geofences.clear()

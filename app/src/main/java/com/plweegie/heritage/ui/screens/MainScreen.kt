@@ -1,6 +1,5 @@
 package com.plweegie.heritage.ui.screens
 
-import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,9 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.permissions.rememberPermissionState
 import com.plweegie.heritage.R
 import com.plweegie.heritage.ui.components.HeritageDropdownMenu
 import com.plweegie.heritage.ui.components.LoadingIndicator
@@ -35,7 +30,7 @@ import com.plweegie.heritage.viewmodel.PlacesListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: PlacesListViewModel = viewModel()
@@ -67,27 +62,6 @@ fun MainScreen(
         "Roman"
     )
 
-    val locationPermissions = rememberMultiplePermissionsState(
-        permissions = listOf(
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
-        )
-    )
-
-    LaunchedEffect("key1") {
-        locationPermissions.launchMultiplePermissionRequest()
-    }
-
-    if (locationPermissions.allPermissionsGranted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        val backgroundLocationPermission = rememberPermissionState(
-            android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
-        )
-
-        LaunchedEffect("key2") {
-            backgroundLocationPermission.launchPermissionRequest()
-        }
-    }
-
     val placesListState = viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -106,7 +80,6 @@ fun MainScreen(
                         scope.launch(Dispatchers.IO) {
                             viewModel.findCurrentLocation()
                             viewModel.sortedByDistance = true
-                            viewModel.startGeofenceMonitoring()
                         }
                     }) {
                         Icon(

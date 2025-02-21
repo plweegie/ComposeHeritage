@@ -24,9 +24,7 @@ class PlacesMapViewModel @Inject constructor(
         get() = repository.currentLocation
 
     val uiState = flow<UiState> {
-        emit(UiState.Success(repository.getPlacesFeed().placesList
-            .filterNot { it.isFreeEntry }
-        ))
+        emit(UiState.Success(repository.getPlacesFeed().placesList))
     }.onStart {
         emit(UiState.Loading)
     }.catch { e ->

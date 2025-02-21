@@ -32,6 +32,8 @@ class GeofencingBroadcastReceiver : BroadcastReceiver() {
             return
         }
 
+        Log.d(TAG, "Geofencing event received: ${geofencingEvent.triggeringGeofences?.first()?.requestId}")
+
         val geofenceTransition = geofencingEvent.geofenceTransition
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             val triggeringGeofences = geofencingEvent.triggeringGeofences

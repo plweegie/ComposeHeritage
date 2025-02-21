@@ -54,7 +54,12 @@ fun HeritageDropdownMenu(
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(text = option) },
+                    text = {
+                        Text(
+                            text = option,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    },
                     onClick = {
                         selected = option
                         onSelected(option)

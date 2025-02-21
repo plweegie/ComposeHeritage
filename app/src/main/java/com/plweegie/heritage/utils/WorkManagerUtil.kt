@@ -2,10 +2,11 @@ package com.plweegie.heritage.utils
 
 import android.content.Context
 import androidx.work.Constraints
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.plweegie.heritage.work.GeofenceStartWorker
+import java.util.concurrent.TimeUnit
 
 object WorkManagerUtil {
 
@@ -16,13 +17,13 @@ object WorkManagerUtil {
             .setRequiresBatteryNotLow(true)
             .build()
 
-        val request = OneTimeWorkRequestBuilder<GeofenceStartWorker>()
+        val request = PeriodicWorkRequestBuilder<GeofenceStartWorker>(1, TimeUnit.HOURS)
             .setConstraints(constraints)
             .build()
 
-        WorkManager.getInstance(context).enqueueUniqueWork(
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             GEOFENCE_WORK_TAG,
-            ExistingWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.UPDATE,
             request
         )
     }

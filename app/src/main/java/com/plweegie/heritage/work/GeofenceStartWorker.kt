@@ -5,6 +5,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.plweegie.heritage.location.GeofenceManager
+import com.plweegie.heritage.model.PlacesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
@@ -12,11 +13,22 @@ import dagger.assisted.AssistedInject
 class GeofenceStartWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val geofenceManager: GeofenceManager
+    private val geofenceManager: GeofenceManager,
+    private val repository: PlacesRepository
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        geofenceManager.startMonitoringGeofences()
+        repository.findCurrentLocation()
+
+        val places = repository.getPlacesFeed().placesList.sortedBy {
+            repository.currentLocation.value.distanceTo(it.location)
+        }.take(5)
+
+        geofenceManager.apply {
+            addGeofences(places)
+            startMonitoringGeofences()
+        }
+
         return Result.success()
     }
 }
