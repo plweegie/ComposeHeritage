@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MyLocation
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +27,6 @@ import com.plweegie.heritage.viewmodel.PlacesListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: PlacesListViewModel = viewModel(),
@@ -60,7 +59,7 @@ fun MainScreen(
         "Roman"
     )
 
-    val placesListState = viewModel.uiState.collectAsStateWithLifecycle()
+    val placesListState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         contentWindowInsets = WindowInsets(0.dp),
@@ -99,11 +98,11 @@ fun MainScreen(
                 onSelected = { viewModel.regionFilter = it }
             )
 
-            LoadingIndicator(placesListState.value is PlacesListViewModel.UiState.Loading)
+            LoadingIndicator(placesListState is PlacesListViewModel.UiState.Loading)
 
             PlacesList(
                 onItemClicked = onNavigateToDetails,
-                places = placesListState.value.let {
+                places = placesListState.let {
                     if (it is PlacesListViewModel.UiState.Success) {
                         it.places
                     } else {

@@ -8,13 +8,13 @@ import com.plweegie.heritage.model.HeritagePlace
 import com.plweegie.heritage.model.PlacesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -64,20 +64,33 @@ class PlacesListViewModel @Inject constructor(
     private val _comparatorFlow: MutableStateFlow<Comparator<HeritagePlace>> =
         MutableStateFlow(compareBy { it.title })
 
+    private val _placesFlow: Flow<List<HeritagePlace>> = repository.getPlacesFeedFlow().stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        emptyList()
+    )
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState = combine(_regionFilterFlow, _categoryFilterFlow, _comparatorFlow) { region, category, comp ->
-        Triple(region, category, comp)
-    }.flatMapLatest { (region, category, comp) ->
-        flow<UiState> {
-            emit(UiState.Success(repository.getPlacesFeed().placesList
-                .sortedWith(comp)
-                .filter { it.region == region || region.isEmpty() }
-                .filter { it.category == category || category.isEmpty() }
-            ))
+    val uiState = combine(
+        _regionFilterFlow,
+        _categoryFilterFlow,
+        _comparatorFlow,
+        _placesFlow
+    ) { region, category, comp, places ->
+        Quadruple(region, category, comp, places)
+    }.flatMapLatest { (region, category, comp, places) ->
+        flow {
+            if (places.isEmpty()) {
+                emit(UiState.Loading)
+            } else {
+                emit(UiState.Success(places
+                    .sortedWith(comp)
+                    .filter { it.region == region || region.isEmpty() }
+                    .filter { it.category == category || category.isEmpty() }
+                ))
+            }
         }.onStart {
             emit(UiState.Loading)
-        }.onEach {
-
         }.catch { e ->
             Log.e("PlaceListViewModel", "Error fetching places: $e")
             emit(UiState.Error)
@@ -97,4 +110,11 @@ class PlacesListViewModel @Inject constructor(
         data object Error : UiState()
         data class Success(val places: List<HeritagePlace>) : UiState()
     }
+
+    private data class Quadruple(
+        val region: String,
+        val category: String,
+        val comparator: Comparator<HeritagePlace>,
+        val places: List<HeritagePlace>
+    )
 }
