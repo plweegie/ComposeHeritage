@@ -16,7 +16,7 @@ class GeofenceManager(
 ) {
 
     private companion object {
-        const val GEOFENCE_RADIUS_METERS = 2000f
+        const val GEOFENCE_RADIUS_METERS = 8000f
         const val GEOFENCE_DURATION_MILLIS = 3600 * 1000L // 1 hour
     }
 
