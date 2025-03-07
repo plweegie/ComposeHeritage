@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.plweegie.heritage.domain.PlacesRepository
 import com.plweegie.heritage.location.GeofenceManager
-import com.plweegie.heritage.model.PlacesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 

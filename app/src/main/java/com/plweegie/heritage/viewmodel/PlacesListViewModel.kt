@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.plweegie.heritage.domain.GetCurrentLocationUseCase
+import com.plweegie.heritage.domain.GetPlacesUseCase
 import com.plweegie.heritage.model.HeritagePlace
-import com.plweegie.heritage.model.PlacesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlacesListViewModel @Inject constructor(
-    private val repository: PlacesRepository,
+    placesUseCase: GetPlacesUseCase,
+    private val locationUseCase: GetCurrentLocationUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -31,7 +33,7 @@ class PlacesListViewModel @Inject constructor(
     }
 
     private val currentLocation
-        get() = repository.currentLocation
+        get() = locationUseCase.currentLocation
 
     private val distanceComparator: Comparator<HeritagePlace> = compareBy { currentLocation.value.distanceTo(it.location) }
 
@@ -64,7 +66,7 @@ class PlacesListViewModel @Inject constructor(
     private val _comparatorFlow: MutableStateFlow<Comparator<HeritagePlace>> =
         MutableStateFlow(compareBy { it.title })
 
-    private val _placesFlow: Flow<List<HeritagePlace>> = repository.getPlacesFeedFlow().stateIn(
+    private val _placesFlow: Flow<List<HeritagePlace>> = placesUseCase.getPlacesFeedFlow().stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(),
         emptyList()
@@ -102,7 +104,7 @@ class PlacesListViewModel @Inject constructor(
     )
 
     suspend fun findCurrentLocation() {
-        repository.findCurrentLocation()
+        locationUseCase.findCurrentLocation()
     }
 
     sealed class UiState {

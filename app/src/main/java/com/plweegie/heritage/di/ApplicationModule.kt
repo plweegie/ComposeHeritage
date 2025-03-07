@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder
 import com.plweegie.heritage.FeedApi
 import com.plweegie.heritage.location.GeofenceManager
 import com.plweegie.heritage.location.LocationTracker
-import com.plweegie.heritage.model.PlacesRepository
+import com.plweegie.heritage.model.PlacesRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -80,5 +80,5 @@ object ApplicationModule {
     fun provideRepository(
         api: FeedApi,
         locationTracker: LocationTracker
-    ): PlacesRepository = PlacesRepository(api, locationTracker)
+    ): PlacesRepositoryImpl = PlacesRepositoryImpl(api, locationTracker)
 }

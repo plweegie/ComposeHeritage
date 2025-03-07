@@ -42,6 +42,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    androidResources {
+        noCompress += "tflite"
+    }
     buildFeatures {
         buildConfig = true
         compose = true
@@ -96,6 +99,12 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.coil)
     implementation(libs.coil.compose)
+    implementation(libs.google.gemini.client)
+    implementation(libs.litert)
+    implementation(libs.litert.gpu)
+    implementation(libs.litert.gpu.api)
+    implementation(libs.litert.metadata)
+    implementation(libs.litert.support)
 
     ksp(libs.dagger.hilt.compiler)
     ksp(libs.androidx.hilt.compiler)

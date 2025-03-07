@@ -16,6 +16,7 @@ hilt = "2.55"
 secrets = "2.0.1"
 generativeai = "0.9.0"
 serialization = "1.8.0"
+litert = "1.1.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,7 +48,13 @@ androidx-compose-icons = "androidx.compose.material:material-icons-extended:1.7.
 accompanist-permissions = "com.google.accompanist:accompanist-permissions:0.37.1"
 kotlinx-coroutines-play-services = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0"
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+
 google-gemini-client = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "generativeai" }
+litert = { group = "com.google.ai.edge.litert", name = "litert", version.ref = "litert" }
+litert-gpu = { group = "com.google.ai.edge.litert", name = "litert-gpu", version.ref = "litert" }
+litert-gpu-api = { group = "com.google.ai.edge.litert", name = "litert-gpu-api", version.ref = "litert" }
+litert-metadata = { group = "com.google.ai.edge.litert", name = "litert-metadata", version.ref = "litert" }
+litert-support = { group = "com.google.ai.edge.litert", name = "litert-support", version.ref = "litert" }
 
 google-maps = "com.google.maps.android:maps-compose:6.4.4"
 google-play-services-location = "com.google.android.gms:play-services-location:21.3.0"

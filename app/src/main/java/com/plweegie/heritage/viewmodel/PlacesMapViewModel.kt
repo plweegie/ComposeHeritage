@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.plweegie.heritage.domain.GetCurrentLocationUseCase
+import com.plweegie.heritage.domain.GetPlacesUseCase
 import com.plweegie.heritage.model.HeritagePlace
-import com.plweegie.heritage.model.PlacesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
@@ -16,15 +17,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlacesMapViewModel @Inject constructor(
-    private val repository: PlacesRepository,
+    private val placesUseCase: GetPlacesUseCase,
+    private val locationUseCase: GetCurrentLocationUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val currentLocation
-        get() = repository.currentLocation
+        get() = locationUseCase.currentLocation
 
     val uiState = flow<UiState> {
-        emit(UiState.Success(repository.getPlacesFeed().placesList))
+        emit(UiState.Success(placesUseCase.getPlacesFeed().placesList))
     }.onStart {
         emit(UiState.Loading)
     }.catch { e ->
@@ -37,7 +39,7 @@ class PlacesMapViewModel @Inject constructor(
     )
 
     suspend fun findCurrentLocation() {
-        repository.findCurrentLocation()
+        locationUseCase.findCurrentLocation()
     }
 
     sealed class UiState {
